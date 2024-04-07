@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:todo_riverpod/screens/detail_screen.dart';
 import 'package:todo_riverpod/services/list_service.dart';
 
 class HomeScreen extends ConsumerWidget {
@@ -18,6 +19,12 @@ class HomeScreen extends ConsumerWidget {
                 final item = value[index];
                 return ListTile(
                   title: Text(item.content),
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const DetailScreen()));
+                  },
                 );
               },
               itemCount: value.length,
