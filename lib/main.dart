@@ -19,6 +19,9 @@ class MyApp extends ConsumerWidget {
         useMaterial3: true,
       ),
       home: const HomeScreen(),
+      // home: const Navigator(
+      //   pages: [MaterialPage(child: HomeScreen(), key: ValueKey('home'))],
+      // ),
     );
   }
 }
