@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:todo_riverpod/screens/detail_screen.dart';
 import 'package:todo_riverpod/screens/home_screen.dart';
 
 void main() {
@@ -19,6 +20,9 @@ class MyApp extends ConsumerWidget {
         useMaterial3: true,
       ),
       home: const HomeScreen(),
+      routes: {
+        'detail': (context) => const DetailScreen(),
+      },
       // home: const Navigator(
       //   pages: [MaterialPage(child: HomeScreen(), key: ValueKey('home'))],
       // ),
