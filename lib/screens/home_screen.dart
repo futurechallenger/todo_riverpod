@@ -19,11 +19,19 @@ class HomeScreen extends ConsumerWidget {
                 final item = value[index];
                 return ListTile(
                   title: Text(item.content),
-                  onTap: () {
-                    Navigator.push(
+                  onTap: () async {
+                    final result = await Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const DetailScreen()));
+                            builder: (context) => const DetailScreen(),
+                            settings: RouteSettings(arguments: value[index])));
+
+                    if (!context.mounted) return;
+
+                    ScaffoldMessenger.of(context)
+                      ..removeCurrentSnackBar()
+                      ..showSnackBar(
+                          SnackBar(content: Text('result: $result')));
                   },
                 );
               },
