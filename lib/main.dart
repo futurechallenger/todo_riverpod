@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:todo_riverpod/screens/detail_screen.dart';
 import 'package:todo_riverpod/screens/home_screen.dart';
 
@@ -13,19 +14,18 @@ class MyApp extends ConsumerWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return MaterialApp(
+    return MaterialApp.router(
       title: 'Flutter Demo',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const HomeScreen(),
-      routes: {
-        'detail': (context) => const DetailScreen(),
-      },
-      // home: const Navigator(
-      //   pages: [MaterialPage(child: HomeScreen(), key: ValueKey('home'))],
-      // ),
+      routerConfig: GoRouter(routes: [
+        GoRoute(path: '/', builder: (_, __) => const HomeScreen(), routes: [
+          GoRoute(path: 'detail', builder: (_, __) => const DetailScreen())
+        ])
+      ]),
+      // home: const HomeScreen(),
     );
   }
 }
