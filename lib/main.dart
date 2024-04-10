@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:todo_riverpod/screens/detail_screen.dart';
 import 'package:todo_riverpod/screens/home_screen.dart';
+import 'package:todo_riverpod/screens/isolate_screen.dart';
 import 'package:todo_riverpod/screens/settings_screen.dart';
 
 void main() {
@@ -24,7 +25,8 @@ class MyApp extends ConsumerWidget {
       routerConfig: GoRouter(routes: [
         GoRoute(path: '/', builder: (_, __) => const HomeScreen()),
         GoRoute(path: '/detail', builder: (_, __) => const DetailScreen()),
-        GoRoute(path: '/settings', builder: (_, __) => const SettingsScreen())
+        GoRoute(path: '/settings', builder: (_, __) => const SettingsScreen()),
+        GoRoute(path: '/isolate', builder: (_, __) => const IsolateScreen())
       ]),
       // home: const HomeScreen(),
     );
