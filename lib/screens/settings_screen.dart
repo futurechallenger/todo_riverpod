@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 final settingsOptions = ["Theme", "Animation", "Isolate"];
 
@@ -16,6 +17,14 @@ class SettingsScreen extends StatelessWidget {
         child: ListView.separated(
             itemBuilder: (context, index) => ListTile(
                   title: Text(settingsOptions[index]),
+                  onTap: () {
+                    switch (index) {
+                      case 2:
+                        context.go("/settings/isolate");
+                      default:
+                        debugPrint("nothing matched");
+                    }
+                  },
                 ),
             separatorBuilder: (_, __) => const Divider(),
             itemCount: settingsOptions.length),
