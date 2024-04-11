@@ -25,8 +25,13 @@ class MyApp extends ConsumerWidget {
       routerConfig: GoRouter(routes: [
         GoRoute(path: '/', builder: (_, __) => const HomeScreen()),
         GoRoute(path: '/detail', builder: (_, __) => const DetailScreen()),
-        GoRoute(path: '/settings', builder: (_, __) => const SettingsScreen()),
-        GoRoute(path: '/isolate', builder: (_, __) => const IsolateScreen())
+        GoRoute(
+            path: '/settings',
+            builder: (_, __) => const SettingsScreen(),
+            routes: [
+              GoRoute(
+                  path: 'isolate', builder: (_, __) => const IsolateScreen())
+            ]),
       ]),
       // home: const HomeScreen(),
     );
