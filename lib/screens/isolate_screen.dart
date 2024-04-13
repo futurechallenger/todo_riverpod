@@ -8,6 +8,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'isolate_screen.g.dart';
 
 int slowFib(int n) => n <= 1 ? 1 : slowFib(n - 1) + slowFib(n - 2);
+
 Future<void> spawnFib(SendPort sendPort) async {
   final commandPort = ReceivePort();
   sendPort.send(commandPort.sendPort);
@@ -27,10 +28,10 @@ Future<void> spawnFib(SendPort sendPort) async {
     } else if (message == null) {
       break;
     }
-
-    debugPrint("Spawn isolate existing...");
-    Isolate.exit();
   }
+
+  debugPrint("Spawn isolate existing...");
+  Isolate.exit();
 }
 
 @riverpod
@@ -118,19 +119,16 @@ class _IsolateScreenState extends State<IsolateScreen> {
                                 SendPort? sendPort;
 
                                 await for (var response in p) {
-                                  if (response == null) {
-                                    break;
-                                  }
-
                                   if (response is SendPort) {
                                     sendPort = response;
                                     sendPort.send(40);
-
-                                    break;
                                   }
 
-                                  // TODO: show calulation result
-                                  debugPrint('received message $response');
+                                  if (response is int) {
+                                    // TODO: show calulation result
+                                    debugPrint('received message $response');
+                                    break;
+                                  }
                                 }
 
                                 if (sendPort != null) sendPort.send(null);
