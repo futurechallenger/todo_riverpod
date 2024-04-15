@@ -20,7 +20,7 @@ class SettingsScreen extends StatelessWidget {
                   onTap: () {
                     switch (index) {
                       case 2:
-                        context.go("/settings/isolate");
+                        context.push("/settings/isolate");
                       default:
                         debugPrint("nothing matched");
                     }
