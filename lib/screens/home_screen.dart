@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:todo_riverpod/models/todo_item.dart';
 import 'package:todo_riverpod/screens/detail_screen.dart';
+import 'package:todo_riverpod/services/list_service.dart';
 import 'package:todo_riverpod/services/todo_list_service.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -13,7 +14,8 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer(builder: (context, ref, child) {
-      final todoList = ref.watch(todoListServiceProvider);
+      // final todoList = ref.watch(todoListServiceProvider);
+      final todoList = ref.watch(todoListProvider);
       return Scaffold(
         appBar: AppBar(
           title: const Text("Todo"),
