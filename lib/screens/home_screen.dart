@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:todo_riverpod/screens/detail_screen.dart';
-import 'package:todo_riverpod/services/list_service.dart';
+import 'package:todo_riverpod/services/todo_list_service.dart';
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final todoList = ref.watch(todoListProvider);
+    final todoList = ref.watch(todoListServiceProvider);
     return Scaffold(
         appBar: AppBar(
           title: const Text("Todo"),
