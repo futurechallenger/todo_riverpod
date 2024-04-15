@@ -6,11 +6,11 @@ part 'todo_item.g.dart';
 @freezed
 class TodoItem with _$TodoItem {
   factory TodoItem({
-    required int id,
+    int? id,
     required String content,
-    required String note,
-    required int deleted,
-    required int status,
+    String? note,
+    int? deleted,
+    int? status,
   }) = _TodoItem;
 
   factory TodoItem.fromJson(Map<String, dynamic> json) =>

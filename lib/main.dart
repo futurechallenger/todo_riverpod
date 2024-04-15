@@ -23,7 +23,7 @@ class MyApp extends ConsumerWidget {
         useMaterial3: true,
       ),
       routerConfig: GoRouter(routes: [
-        GoRoute(path: '/', builder: (_, __) => const HomeScreen()),
+        GoRoute(path: '/', builder: (_, __) => HomeScreen()),
         GoRoute(path: '/detail', builder: (_, __) => const DetailScreen()),
         GoRoute(
             path: '/settings',
