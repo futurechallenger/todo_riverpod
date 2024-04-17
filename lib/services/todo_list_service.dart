@@ -74,7 +74,7 @@ class TodoListService extends _$TodoListService {
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8'
         },
-        body: json.encode(todo));
+        body: json.encode({'todo': todo}));
     if (response.statusCode != 200) {
       /* 
         state = AsyncValue.error("Http request failed", StackTrace.current);

@@ -114,6 +114,7 @@ class _DetailScreenState extends State<DetailScreen> {
                                               .read(todoListServiceProvider
                                                   .notifier)
                                               .updateTodo(TodoItem(
+                                                id: widget.todo.id,
                                                 content: _controller.text,
                                               ));
                                           FocusScope.of(context).unfocus();
@@ -144,7 +145,7 @@ class _DetailScreenState extends State<DetailScreen> {
                       ),
                     ),
                     if (snapshot.connectionState == ConnectionState.waiting)
-                      const CircularProgressIndicator()
+                      const Center(child: CircularProgressIndicator())
                   ],
                 );
               }),
