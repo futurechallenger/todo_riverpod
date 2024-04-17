@@ -27,22 +27,3 @@ Future<List<TodoItem>> todoList(TodoListRef ref) async {
     return <TodoItem>[];
   }
 }
-
-@riverpod
-Future<TodoItem?> addTodo(AddTodoRef ref, TodoItem todo) async {
-  final response = await http.post(Uri.parse('http://192.168.31.182:17788/add'),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8'
-      },
-      body: json.encode(todo));
-  if (response.statusCode != 200) {
-    throw Exception("Error adding todo");
-  }
-
-  final body = jsonDecode(response.body) as Map<String, dynamic>;
-  if (body['message'] != 'ok') {
-    throw Exception("Response from service is invalid");
-  }
-
-  return TodoItem.fromJson(body['data']);
-}
