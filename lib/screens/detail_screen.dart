@@ -77,7 +77,10 @@ class _DetailScreenState extends State<DetailScreen> {
                           Padding(
                             padding: const EdgeInsets.all(18.0),
                             child: Builder(builder: (context) {
-                              if (!_showTextField) {
+                              if (!_showTextField ||
+                                  (snapshot.connectionState ==
+                                          ConnectionState.done &&
+                                      !snapshot.hasError)) {
                                 return TextButton(
                                   onPressed: () {
                                     debugPrint("todo is clicked");
