@@ -7,31 +7,26 @@ import 'package:todo_riverpod/models/todo_item.dart';
 
 part 'todo_list_service.g.dart';
 
-@Riverpod(keepAlive: true)
+@riverpod
 class TodoListService extends _$TodoListService {
   @override
   Future<List<TodoItem>> build() async {
-    try {
-      final response =
-          await http.get(Uri.parse('http://192.168.31.182:17788/list/all'));
-      if (response.statusCode == 200) {
-        final body = jsonDecode(response.body) as Map<String, dynamic>;
-        if (body['message'] != 'ok') {
-          return <TodoItem>[];
-        }
-
-        final data = body['data'] as List<dynamic>;
-        final List<TodoItem> todoItemList = [];
-        for (var e in data) {
-          todoItemList.add(TodoItem.fromJson(e));
-        }
-
-        return todoItemList;
-      } else {
+    final response =
+        await http.get(Uri.parse('http://192.168.31.182:17788/list/all'));
+    if (response.statusCode == 200) {
+      final body = jsonDecode(response.body) as Map<String, dynamic>;
+      if (body['message'] != 'ok') {
         return <TodoItem>[];
       }
-    } catch (e) {
-      debugPrint("Error $e");
+
+      final data = body['data'] as List<dynamic>;
+      final List<TodoItem> todoItemList = [];
+      for (var e in data) {
+        todoItemList.add(TodoItem.fromJson(e));
+      }
+
+      return todoItemList;
+    } else {
       return <TodoItem>[];
     }
   }
@@ -71,5 +66,43 @@ class TodoListService extends _$TodoListService {
 
     ref.invalidateSelf();
     await future;
+  }
+
+  Future<void> updateTodo(TodoItem todo) async {
+    final response = await http.post(
+        Uri.parse('http://192.168.31.182:17788/update'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8'
+        },
+        body: json.encode(todo));
+    if (response.statusCode != 200) {
+      /* 
+        state = AsyncValue.error("Http request failed", StackTrace.current);
+        Todo list page will be failed too.
+        The page that `watching` this Notifier shows error message. 
+      */
+      throw Exception("Error adding todo");
+    }
+
+    final body = jsonDecode(response.body) as Map<String, dynamic>;
+    if (body['message'] != 'ok') {
+      /* 
+        state = AsyncValue.error("Update todo failed", StackTrace.current); 
+        Set state error, the list page is error too
+      */
+      throw Exception("Response from service is invalid");
+    }
+
+    final previousState = await future;
+
+    final newState = previousState.map((e) {
+      if (e.id == todo.id) {
+        return todo;
+      } else {
+        return e;
+      }
+    });
+
+    state = AsyncData([...newState]);
   }
 }

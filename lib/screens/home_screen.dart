@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:todo_riverpod/models/todo_item.dart';
 import 'package:todo_riverpod/screens/detail_screen.dart';
-import 'package:todo_riverpod/services/list_service.dart';
 import 'package:todo_riverpod/services/todo_list_service.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -14,8 +13,7 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer(builder: (context, ref, child) {
-      // final todoList = ref.watch(todoListServiceProvider);
-      final todoList = ref.watch(todoListProvider);
+      final todoList = ref.watch(todoListServiceProvider);
       return Scaffold(
         appBar: AppBar(
           title: const Text("Todo"),
@@ -28,28 +26,38 @@ class HomeScreen extends StatelessWidget {
           ],
         ),
         body: switch (todoList) {
-          AsyncData(:final value) => ListView.builder(
-              itemBuilder: (context, index) {
-                final item = value[index];
-                return ListTile(
-                  title: Text(item.content),
-                  onTap: () async {
-                    final result = await Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const DetailScreen(),
-                            settings: RouteSettings(arguments: value[index])));
+          AsyncData(:final value) => Stack(
+              children: [
+                ListView.builder(
+                  itemBuilder: (context, index) {
+                    final item = value[index];
+                    return ListTile(
+                      title: Text(item.content),
+                      onTap: () async {
+                        // final result = await Navigator.push(
+                        //     context,
+                        //     MaterialPageRoute(
+                        //         builder: (context) => const DetailScreen(),
+                        //         settings:
+                        //             RouteSettings(arguments: value[index])));
+                        final result =
+                            await context.push('/detail', extra: value[index]);
 
-                    if (!context.mounted) return;
+                        if (!context.mounted) return;
 
-                    ScaffoldMessenger.of(context)
-                      ..removeCurrentSnackBar()
-                      ..showSnackBar(
-                          SnackBar(content: Text('result: $result')));
+                        ScaffoldMessenger.of(context)
+                          ..removeCurrentSnackBar()
+                          ..showSnackBar(
+                              SnackBar(content: Text('result: $result')));
+                      },
+                    );
                   },
-                );
-              },
-              itemCount: value.length,
+                  itemCount: value.length,
+                ),
+                // switch() {
+
+                // }
+              ],
             ),
           AsyncError(:final error) => Text("Error $error"),
           _ => const CircularProgressIndicator(),
@@ -65,12 +73,13 @@ class HomeScreen extends StatelessWidget {
                       ),
                       actions: [
                         ElevatedButton(
-                            onPressed: () {
+                            onPressed: () async {
                               ref
                                   .read(todoListServiceProvider.notifier)
                                   .addTodo(TodoItem(
                                     content: _controller.text,
                                   ));
+
                               _controller.text = "";
                               context.pop();
                             },
