@@ -31,9 +31,6 @@ class _DetailScreenState extends State<DetailScreen> {
 
     _focusNode.addListener(() {
       if (!_focusNode.hasFocus) {
-        // setState(() {
-        //   _pendingTodo = null;
-        // });
         if (_controller.text.isNotEmpty) {
           setState(() {
             _hintText = _controller.text;
@@ -121,11 +118,8 @@ class _DetailScreenState extends State<DetailScreen> {
                                                 content: _controller.text,
                                               ));
                                           FocusScope.of(context).unfocus();
-                                          // _controller.clear();
 
                                           setState(() {
-                                            // _showTextField = false;
-                                            // _editing = false;
                                             _pendingTodo = future;
                                           });
                                         },
