@@ -67,6 +67,7 @@ class IsolateScreen extends StatefulWidget {
 
 class _IsolateScreenState extends State<IsolateScreen> {
   Future<int>? _pendingFuture;
+  int _initVal = 1;
 
   @override
   Widget build(BuildContext context) {
@@ -135,7 +136,12 @@ class _IsolateScreenState extends State<IsolateScreen> {
                               },
                               child: const Text("Cal with spawn"),
                             ),
-                          )
+                          ),
+                          Expanded(
+                              child: _initVal == 1
+                                  ? const Text("OK")
+                                  : ElevatedButton(
+                                      onPressed: () {}, child: Text("click")))
                         ],
                       ),
                       if (snapshot.hasData)

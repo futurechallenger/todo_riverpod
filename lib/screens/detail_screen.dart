@@ -44,111 +44,105 @@ class _DetailScreenState extends State<DetailScreen> {
   @override
   Widget build(BuildContext context) {
     return Consumer(builder: (context, ref, child) {
-      return Builder(builder: (context) {
-        return Scaffold(
-          appBar: AppBar(
-            title: const Text('Detail'),
-          ),
-          body: FutureBuilder(
-              future: _pendingTodo,
-              builder: (context, snapshot) {
-                bool hasError = snapshot.hasError &&
-                    snapshot.connectionState != ConnectionState.waiting;
+      return Scaffold(
+        appBar: AppBar(
+          title: const Text('Detail'),
+        ),
+        body: FutureBuilder(
+            future: _pendingTodo,
+            builder: (context, snapshot) {
+              bool hasError = snapshot.hasError &&
+                  snapshot.connectionState != ConnectionState.waiting;
 
-                if (hasError) {
-                  WidgetsBinding.instance.addPostFrameCallback((_) {
-                    ScaffoldMessenger.of(context)
-                      ..removeCurrentSnackBar()
-                      ..showSnackBar(const SnackBar(
-                        content: Text("Something wrong"),
-                        backgroundColor: Colors.redAccent,
-                      ));
-                  });
-                }
+              if (hasError) {
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  ScaffoldMessenger.of(context)
+                    ..removeCurrentSnackBar()
+                    ..showSnackBar(const SnackBar(
+                      content: Text("Something wrong"),
+                      backgroundColor: Colors.redAccent,
+                    ));
+                });
+              }
 
-                return Stack(
-                  children: [
-                    Center(
-                      child: Column(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(18.0),
-                            child: Builder(builder: (context) {
-                              if (!_showTextField ||
-                                  (snapshot.connectionState ==
-                                          ConnectionState.done &&
-                                      !snapshot.hasError)) {
-                                return TextButton(
-                                  onPressed: () {
-                                    debugPrint("todo is clicked");
-                                    setState(() {
-                                      _showTextField = true;
-                                    });
-                                  },
-                                  child: Text(
-                                    _hintText.isNotEmpty
-                                        ? _hintText
-                                        : _controller.text,
-                                    style: const TextStyle(
-                                        color: Colors.deepOrange, fontSize: 30),
-                                  ),
-                                );
-                              } else {
-                                return Row(
-                                  children: [
-                                    Expanded(
-                                      flex: 1,
-                                      child: TextField(
-                                        autofocus: true,
-                                        focusNode: _focusNode,
-                                        controller: _controller,
-                                        decoration: InputDecoration(
-                                            hintText: _hintText.isNotEmpty
-                                                ? _hintText
-                                                : _controller.text),
-                                      ),
-                                    ),
-                                    ElevatedButton(
-                                        onPressed: () {
-                                          final future = ref
-                                              .read(todoListServiceProvider
-                                                  .notifier)
-                                              .updateTodo(TodoItem(
-                                                id: widget.todo.id,
-                                                content: _controller.text,
-                                              ));
-                                          FocusScope.of(context).unfocus();
-
-                                          setState(() {
-                                            _pendingTodo = future;
-                                          });
-                                        },
-                                        child: const Text("OK")),
-                                  ],
-                                );
-                              }
-                            }),
-                          ),
-                          Center(
-                            child: ElevatedButton(
-                                onPressed: () {
-                                  // Navigator.pop(
-                                  //     context, '${todo.content} is read');
-                                  context.pop(widget.todo.content);
-                                },
-                                child: const Text("Back")),
-                          ),
-                        ],
-                      ),
+              return Stack(
+                children: [
+                  Center(
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(18.0),
+                          child: getUpdatingWidgets(snapshot, ref),
+                        ),
+                        Center(
+                          child: ElevatedButton(
+                              onPressed: () {
+                                // Navigator.pop(
+                                //     context, '${todo.content} is read');
+                                context.pop(widget.todo.content);
+                              },
+                              child: const Text("Back")),
+                        ),
+                      ],
                     ),
-                    if (snapshot.connectionState == ConnectionState.waiting)
-                      const Center(child: CircularProgressIndicator())
-                  ],
-                );
-              }),
-        );
-      });
+                  ),
+                  if (snapshot.connectionState == ConnectionState.waiting)
+                    const Center(child: CircularProgressIndicator())
+                ],
+              );
+            }),
+      );
     });
+  }
+
+  Widget getUpdatingWidgets(AsyncSnapshot<void> snapshot, WidgetRef ref) {
+    if (!_showTextField ||
+        (snapshot.connectionState == ConnectionState.done &&
+            !snapshot.hasError)) {
+      return TextButton(
+        onPressed: () {
+          debugPrint("todo is clicked");
+          setState(() {
+            _showTextField = true;
+          });
+        },
+        child: Text(
+          _hintText.isNotEmpty ? _hintText : _controller.text,
+          style: const TextStyle(color: Colors.deepOrange, fontSize: 30),
+        ),
+      );
+    } else {
+      return Row(
+        children: [
+          Expanded(
+            flex: 1,
+            child: TextField(
+              autofocus: true,
+              focusNode: _focusNode,
+              controller: _controller,
+              decoration: InputDecoration(
+                  hintText:
+                      _hintText.isNotEmpty ? _hintText : _controller.text),
+            ),
+          ),
+          ElevatedButton(
+              onPressed: () {
+                final future = ref
+                    .read(todoListServiceProvider.notifier)
+                    .updateTodo(TodoItem(
+                      id: widget.todo.id,
+                      content: _controller.text,
+                    ));
+                FocusScope.of(context).unfocus();
+
+                setState(() {
+                  _pendingTodo = future;
+                });
+              },
+              child: const Text("OK")),
+        ],
+      );
+    }
   }
 
   @override
