@@ -32,7 +32,7 @@ class HomeScreen extends StatelessWidget {
                   itemBuilder: (context, index) {
                     final item = value[index];
                     return ListTile(
-                      title: Text(item.content),
+                      title: Text(item.title),
                       onTap: () async {
                         // final result = await Navigator.push(
                         //     context,
@@ -77,7 +77,7 @@ class HomeScreen extends StatelessWidget {
                               ref
                                   .read(todoListServiceProvider.notifier)
                                   .addTodo(TodoItem(
-                                    content: _controller.text,
+                                    title: _controller.text,
                                   ));
 
                               _controller.text = "";
