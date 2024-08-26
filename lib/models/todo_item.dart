@@ -7,8 +7,8 @@ part 'todo_item.g.dart';
 class TodoItem with _$TodoItem {
   factory TodoItem({
     int? id,
-    required String content,
-    String? note,
+    required String title,
+    String? desc,
     int? deleted,
     int? status,
   }) = _TodoItem;
