@@ -7,15 +7,16 @@ import 'package:todo_riverpod/models/todo_item.dart';
 
 part 'todo_list_service.g.dart';
 
+const serverHost = 'http://192.168.31.182:3300';
+
 @riverpod
 class TodoListService extends _$TodoListService {
   @override
   Future<List<TodoItem>> build() async {
-    final response =
-        await http.get(Uri.parse('http://192.168.31.182:17788/list/all'));
+    final response = await http.get(Uri.parse('$serverHost/todo/0'));
     if (response.statusCode == 200) {
       final body = jsonDecode(response.body) as Map<String, dynamic>;
-      if (body['message'] != 'ok') {
+      if (body['message'] != 'OK') {
         return <TodoItem>[];
       }
 
@@ -32,8 +33,7 @@ class TodoListService extends _$TodoListService {
   }
 
   Future<void> addTodo(TodoItem todo) async {
-    final response = await http.post(
-        Uri.parse('http://192.168.31.182:17788/add'),
+    final response = await http.post(Uri.parse('$serverHost/todo/create'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8'
         },
@@ -43,7 +43,7 @@ class TodoListService extends _$TodoListService {
     }
 
     final body = jsonDecode(response.body) as Map<String, dynamic>;
-    if (body['message'] != 'ok') {
+    if (body['message'] != 'OK') {
       throw Exception("Response from service is invalid");
     }
 
@@ -69,8 +69,7 @@ class TodoListService extends _$TodoListService {
   }
 
   Future<void> updateTodo(TodoItem todo) async {
-    final response = await http.post(
-        Uri.parse('http://192.168.31.182:17788/update'),
+    final response = await http.post(Uri.parse('$serverHost/todo/update'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8'
         },
@@ -85,7 +84,7 @@ class TodoListService extends _$TodoListService {
     }
 
     final body = jsonDecode(response.body) as Map<String, dynamic>;
-    if (body['message'] != 'ok') {
+    if (body['message'] != 'OK') {
       /* 
         state = AsyncValue.error("Update todo failed", StackTrace.current); 
         Set state error, the list page is error too

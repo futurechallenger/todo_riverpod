@@ -22,7 +22,7 @@ class _DetailScreenState extends State<DetailScreen> {
 
   @override
   void initState() {
-    _controller.text = widget.todo.content;
+    _controller.text = widget.todo.title;
 
     setState(() {
       _hintText = _controller.text;
@@ -79,7 +79,7 @@ class _DetailScreenState extends State<DetailScreen> {
                               onPressed: () {
                                 // Navigator.pop(
                                 //     context, '${todo.content} is read');
-                                context.pop(widget.todo.content);
+                                context.pop(widget.todo.title);
                               },
                               child: const Text("Back")),
                         ),
@@ -131,7 +131,7 @@ class _DetailScreenState extends State<DetailScreen> {
                     .read(todoListServiceProvider.notifier)
                     .updateTodo(TodoItem(
                       id: widget.todo.id,
-                      content: _controller.text,
+                      title: _controller.text,
                     ));
                 FocusScope.of(context).unfocus();
 
